@@ -14,3 +14,12 @@ dime <- pivot_longer(sqcapfccp, cols=c(`sac.area6`, `sac.area7`, `sac.area8`), n
 
 str(dime)
 print(dime, n=50)
+
+dime$pH <- as.factor(dime$pH)
+
+ggplot(data = dime, aes(sec, area, group = pH)) +
+  geom_line(aes(colour = factor(pH))) +
+  labs(x = "sec", y = "area") + 
+  theme(text = element_text(size = 15), 
+        axis.text = element_text(size = 12), aspect.ratio = 0.75) +
+  theme_classic()
