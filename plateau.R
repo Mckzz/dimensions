@@ -7,19 +7,17 @@ library(Hmisc)
 install.packages("Hmisc")
 
 
-is.data.frame(sqcapfccp)
-str(sqcapfccp)
+is.data.frame(larva1b)
+str(larva1b)
 
-dime <- pivot_longer(sqcapfccp, cols=c(`sac.area6`, `sac.area7`, `sac.area8`), names_to = "pH", values_to = "area")
+dime1b <- pivot_longer(larva1b, cols=c(`sac.area6`, `sac.area7`, `sac.area8`), names_to = "pH", values_to = "area")
 
-str(dime)
-print(dime, n=50)
+str(dime1b)
+print(dime1b, n=50)
 
-dime$pH <- as.factor(dime$pH)
+dime1b$pH <- as.factor(dime1b$pH)
 
-ggplot(data = dime, aes(sec, area, group = pH)) +
+ggplot(data = dime1b, aes(min, area, group = pH)) +
   geom_line(aes(colour = factor(pH))) +
-  labs(x = "sec", y = "area") + 
-  theme(text = element_text(size = 15), 
-        axis.text = element_text(size = 12), aspect.ratio = 0.75) +
+  labs(x = "min", y = "area") + 
   theme_classic()
