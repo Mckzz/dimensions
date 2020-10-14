@@ -10,7 +10,9 @@ install.packages("Hmisc")
 is.data.frame(larva1b)
 str(larva1b)
 
-dime1b <- pivot_longer(larva1b, cols=c(`sac.area6`, `sac.area7`, `sac.area8`), names_to = "pH", values_to = "area")
+dime1b <- pivot_longer(larva1b, 
+                       cols=c(`sac.area6`, `sac.area7`, `sac.area8`), 
+                       names_to = "pH", values_to = "area")
 
 str(dime1b)
 print(dime1b, n=50)
