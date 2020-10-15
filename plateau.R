@@ -45,19 +45,20 @@ slopes <- pivot_longer(widthlong,
 str(slopes)
 print(slopes, n=50)
 
-
+#so that the pH categories can be renamed
 slopes$pHwidth <- as.character(slopes$pHwidth)
 
+#renaming and convert to factor
 slopes$pHwidth[slopes$pHwidth == 'pH6w'] <- '6'
 slopes$pHwidth[slopes$pHwidth == 'pH7w'] <- '7'
 slopes$pHwidth[slopes$pHwidth == 'pH8w'] <- '8'
 slopes$pHwidth <- as.factor(slopes$pHwidth)
 
+#don't need extra pH category
 slopes$pHarea <- NULL
 
-
-
-
+#rename pHwidth to just "pH"
+slopes <- slopes %>% rename(pH = pHwidth)
 
 
 
