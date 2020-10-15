@@ -31,11 +31,21 @@ ggplot(data = dime1c, aes(min, area, group = pH)) +
 rm(widthlong1c)
 
 str(pcts_norm7)
+print(pcts_norm7)
 
 #first pivots the withdths to long, leaving the areas as they were in excel data entry doc
 widthlong <- pivot_longer(pcts_norm7, 
                          cols=c(`pH6w`, `pH7w`, `pH8w`), 
                          names_to = "pHwidth", values_to = "width")
+
+widthlong$pHwidth[widthlong$pHwidth == 'pH6w'] <- '6'
+widthlong$pHwidth[widthlong$pHwidth == 'pH7w'] <- '7'
+widthlong$pHwidth[widthlong$pHwidth == 'pH8w'] <- '8'
+widthlong$pHwidth <- as.factor(widthlong$pHwidth)
+
+
+print(widthlong, n= 30)
+
 #then pivots the areas in widthlong1c to make the fully long form dataframe
 slopes <- pivot_longer(widthlong, 
                          cols=c(`pH6a`, `pH7a`, `pH8a`), 
@@ -45,20 +55,41 @@ slopes <- pivot_longer(widthlong,
 str(slopes)
 print(slopes, n=50)
 
-#so that the pH categories can be renamed
+#so that the pH width categories can be renamed
 slopes$pHwidth <- as.character(slopes$pHwidth)
 
-#renaming and convert to factor
-slopes$pHwidth[slopes$pHwidth == 'pH6w'] <- '6'
-slopes$pHwidth[slopes$pHwidth == 'pH7w'] <- '7'
-slopes$pHwidth[slopes$pHwidth == 'pH8w'] <- '8'
-slopes$pHwidth <- as.factor(slopes$pHwidth)
 
-#don't need extra pH category
+#extract area columns and reorder
+justarea <- slopes[ , c(1,4,5)]
+print(justarea)
+justarea <- arrange(justarea, pHarea)
+print(justarea)
+justarea <- justarea %>% rename(area1 = area)
+print(justarea)
+
+#bring area1 to slopes
+slopes$area1 <- justarea$area1
+print(slopes)
+
+#don't need extra pH and area variables
 slopes$pHarea <- NULL
+slopes$area <- NULL
+
+#gets rid of all duplicate rows
+slopes <- unique( slopes[ ,  ] )
+print(slopes)
 
 #rename pHwidth to just "pH"
 slopes <- slopes %>% rename(pH = pHwidth)
+
+print(slopes)
+
+slopes$pH <- as.numeric(slopes$pH)
+
+ggplot(data = slopes, aes(pH, width)) +
+  geom_line() +
+  labs(x = "pH", y = "width") + 
+  theme_classic()
 
 
 
