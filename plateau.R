@@ -86,10 +86,10 @@ print(slopes)
 
 slopes$pH <- as.numeric(slopes$pH)
 
-ggplot(data = slopes, aes(pH, width)) +
-  geom_line() +
-  labs(x = "pH", y = "width") + 
+ggplot(data = slopes, aes(x= pH)) +
+  geom_line(aes(y= width, color= "red")) +
+  geom_line(aes(y= area1, color= "blue")) +
+  labs(x = "pH", y = "% change") + 
+  labs(color="Dimension") +
   theme_classic()
-
-
 
