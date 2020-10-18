@@ -8,28 +8,27 @@ install.packages("Hmisc")
 
 ####area plateaus
 
-is.data.frame(larva1c)
-str(larva1c)
+is.data.frame(larva1e_profiles)
+str(larva1e_profiles)
 
-dime1c <- pivot_longer(larva1c, 
+dime1e <- pivot_longer(larva1e_profiles, 
                        cols=c(`sac.area6`, `sac.area7`, `sac.area8`), 
                        names_to = "pH", values_to = "area")
 
-str(dime1c)
-print(dime1c, n=50)
+str(dime1e)
+print(dime1e, n=50)
 
 #so that $pH could be assigned colours
-dime1c$pH <- as.factor(dime1c$pH)
+dime1e$pH <- as.factor(dime1e$pH)
 
-ggplot(data = dime1c, aes(min, area, group = pH)) +
+ggplot(data = dime1e, aes(min, area, group = pH)) +
   geom_line(aes(colour = factor(pH))) +
   labs(x = "min", y = "area") + 
   theme_classic()
 
 
 #### line slope comparisons
-rm(widthlong1c)
-
+rm(pcts_norm7)
 str(pcts_norm7)
 print(pcts_norm7)
 
@@ -74,7 +73,7 @@ print(slopes)
 #don't need extra pH and area variables
 slopes$pHarea <- NULL
 slopes$area <- NULL
-
+print(slopes)
 #gets rid of all duplicate rows
 slopes <- unique( slopes[ ,  ] )
 print(slopes)
