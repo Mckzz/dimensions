@@ -133,13 +133,16 @@ means$a.sd <- stdvs$a.sd
 
 print(means)
 
+end.means <- means[-2, ]
+print(end.means)
+
 ggplot(data = slopes, aes(x= pH)) +
   geom_line(aes(y= width, group= larva, color= "width")) +
   geom_line(aes(y= area1, group= larva, color= "area")) +
   geom_point(data = means, aes(pH, a.m)) +
   geom_point(data = means, aes(pH, w.m)) +
-  geom_errorbar(data=means, mapping=aes(x=pH, ymin=a.m-a.sd, ymax=a.m+a.sd), width=0.05, size=1) +
-  geom_errorbar(data=means, mapping=aes(x=pH, ymin=w.m-w.sd, ymax=w.m+w.sd), width=0.05, size=1) +
+  geom_errorbar(data=end.means, mapping=aes(x=pH, ymin=a.m-a.sd, ymax=a.m+a.sd), width=0.05, size=0.5) +
+  geom_errorbar(data=end.means, mapping=aes(x=pH, ymin=w.m-w.sd, ymax=w.m+w.sd), width=0.05, size=0.5) +
   labs(x = "pH", y = "% change") + 
   labs(color="Dimension") +
   theme_classic()
