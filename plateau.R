@@ -81,9 +81,21 @@ print(slopes)
 #rename pHwidth to just "pH"
 slopes <- slopes %>% rename(pH = pHwidth)
 
+slopes$pH <- as.numeric(slopes$pH)
+
 print(slopes)
 
+#remove pH7 points (not working, removes all rows no matter what I do)
+slopes$pH <- as.character(slopes$pH)
 slopes$pH <- as.numeric(slopes$pH)
+
+end.slopes <- slopes[slopes$pH == "6" & slopes$pH == "8", c("larva", "pH", "width", "area1") ]
+end.slopes <- subset(slopes, pH == 6 && pH == 8)
+
+print(end.slopes)
+
+slopes$pH <- as.numeric(slopes$pH)
+rm(end.slopes)
 
 #making means
 a.means <- slopes %>% 
@@ -98,11 +110,8 @@ w.means <- slopes %>%
 
 print(w.means)
 
-
 means <- a.means
 print(means)
-
-summary(slopes)
 
 #bring area1 to slopes
 means$w.m <- w.means$w.m
@@ -137,13 +146,40 @@ end.means <- means[-2, ]
 print(end.means)
 
 ggplot(data = slopes, aes(x= pH)) +
-  geom_line(aes(y= width, group= larva, color= "width")) +
-  geom_line(aes(y= area1, group= larva, color= "area")) +
-  geom_point(data = means, aes(pH, a.m)) +
-  geom_point(data = means, aes(pH, w.m)) +
-  geom_errorbar(data=end.means, mapping=aes(x=pH, ymin=a.m-a.sd, ymax=a.m+a.sd), width=0.05, size=0.5) +
-  geom_errorbar(data=end.means, mapping=aes(x=pH, ymin=w.m-w.sd, ymax=w.m+w.sd), width=0.05, size=0.5) +
+  geom_point(position = position_jitter(width = 0.03), pch= 1, colour= "blue", aes(y= width, group= larva)) +
+  geom_point(position = position_jitter(width = 0.03), pch= 1, colour= "red", aes(y= area1, group= larva)) +
+  geom_line(data = means, size= 1, color= "red", aes(pH, a.m)) +
+  geom_line(data = means, size= 1, color= "blue", aes(pH, w.m)) +
+  geom_point(data = means, pch= 19, color= "red", size= 4, aes(pH, a.m)) +
+  geom_point(data = means, pch= 19, color= "blue", size= 4, aes(pH, w.m)) +
+  geom_errorbar(data=end.means, 
+                mapping=aes(x= pH, ymin= a.m - a.sd, ymax= a.m + a.sd), 
+                width=0.05, 
+                size=0.75) +
+  geom_errorbar(data=end.means, 
+                mapping=aes(x= pH, ymin=w.m - w.sd, ymax= w.m + w.sd), 
+                width=0.05, 
+                size=0.75) +
   labs(x = "pH", y = "% change") + 
   labs(color="Dimension") +
   theme_classic()
 
+#without jitter
+ggplot(data = slopes, aes(x= pH)) +
+  geom_point(pch= 1, colour= "blue", aes(y= width, group= larva)) +
+  geom_point(pch= 1, colour= "red", aes(y= area1, group= larva)) +
+  geom_line(data = means, color= "red", aes(pH, a.m)) +
+  geom_line(data = means, color= "blue", aes(pH, w.m)) +
+  geom_point(data = end.means, color= "red", size= 3, aes(pH, a.m)) +
+  geom_point(data = end.means, color= "blue", size= 3, aes(pH, w.m)) +
+  geom_errorbar(data=end.means, 
+                mapping=aes(x= pH, ymin= a.m - a.sd, ymax= a.m + a.sd), 
+                width=0.05, 
+                size=0.5) +
+  geom_errorbar(data=end.means, 
+                mapping=aes(x= pH, ymin=w.m - w.sd, ymax= w.m + w.sd), 
+                width=0.05, 
+                size=0.5) +
+  labs(x = "pH", y = "% change") + 
+  labs(color="Dimension") +
+  theme_classic()
