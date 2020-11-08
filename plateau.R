@@ -95,6 +95,7 @@ end.slopes <- subset(slopes, pH == 6 && pH == 8)
 print(end.slopes)
 
 slopes$pH <- as.numeric(slopes$pH)
+
 rm(end.slopes)
 
 #making means
@@ -131,7 +132,7 @@ area.sds <- slopes %>%
 
 print(area.sds)
 
-#combine width and area sds
+#combine width and area standard deviations
 stdvs <- width.sds
 stdvs$a.sd <- area.sds$a.sd
 
@@ -145,7 +146,7 @@ print(means)
 end.means <- means[-2, ]
 print(end.means)
 
-# plot with jitter (final)
+# plot with jitter
 ggplot(data = slopes, aes(x= pH)) +
   geom_point(position = position_jitter(width = 0.03), pch= 1, colour= "blue", aes(y= width, group= larva)) +
   geom_point(position = position_jitter(width = 0.03), pch= 1, colour= "red", aes(y= area1, group= larva)) +
@@ -186,7 +187,7 @@ ggplot(data = slopes, aes(x= pH)) +
   theme_classic()
 
 
-# stats
+# stats (just playing around with some bullshit)
 install.packages("visreg")
 library(visreg)
 
@@ -207,6 +208,17 @@ summary.aov(widfit)
 
 anova(widfit)
 anova(arfit)
+
+
+measurements <- pivot_longer(slopes, 
+                       cols=c(`width`, `area1`), 
+                       names_to = "measure", values_to = "value")
+print(measurements)
+
+fit <- lm(value ~ measure * pH, data = measurements)
+visreg(fit)
+summary.aov(fit)
+
 
 
 
