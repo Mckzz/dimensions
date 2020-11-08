@@ -145,6 +145,7 @@ print(means)
 end.means <- means[-2, ]
 print(end.means)
 
+# plot with jitter (final)
 ggplot(data = slopes, aes(x= pH)) +
   geom_point(position = position_jitter(width = 0.03), pch= 1, colour= "blue", aes(y= width, group= larva)) +
   geom_point(position = position_jitter(width = 0.03), pch= 1, colour= "red", aes(y= area1, group= larva)) +
@@ -164,7 +165,7 @@ ggplot(data = slopes, aes(x= pH)) +
   labs(color="Dimension") +
   theme_classic()
 
-#without jitter
+# without jitter
 ggplot(data = slopes, aes(x= pH)) +
   geom_point(pch= 1, colour= "blue", aes(y= width, group= larva)) +
   geom_point(pch= 1, colour= "red", aes(y= area1, group= larva)) +
@@ -183,3 +184,32 @@ ggplot(data = slopes, aes(x= pH)) +
   labs(x = "pH", y = "% change") + 
   labs(color="Dimension") +
   theme_classic()
+
+
+# stats
+install.packages("visreg")
+library(visreg)
+
+slopes$pH <- as.factor(slopes$pH)
+slopes$larva <- as.character(slopes$larva)
+slopes$larva <- as.numeric(slopes$larva)
+print(slopes)
+
+widfit <- lm(width ~ pH * larva, data = slopes)
+arfit <- lm(area1 ~ pH * larva, data = slopes)
+
+visreg(widfit)
+visreg(arfit)
+
+
+summary.aov(arfit)
+summary.aov(widfit)
+
+anova(widfit)
+anova(arfit)
+
+
+
+
+
+
