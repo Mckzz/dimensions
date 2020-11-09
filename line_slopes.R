@@ -1,3 +1,12 @@
+install.packages("tidyverse")
+library(tidyverse)
+library(tidyr)
+library(dplyr)
+library(ggplot2)
+library(Hmisc)
+rm(Hmisc)
+install.packages("Hmisc")
+
 #### line slope comparisons
 rm(norm7)
 str(norm7)
