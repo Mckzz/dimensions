@@ -197,8 +197,3 @@ visreg(fit)
 summary.aov(fit)
 
 
-
-
-
-
-

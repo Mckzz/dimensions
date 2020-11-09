@@ -1,7 +1,7 @@
 ####################### Vikram's wisdom ############################
 
 library(tidyverse)
-norm7 <- read_csv("./norm7.csv")
+raw <- read_csv("./norm7.csv")
 
 ##### tidy up the data ####
 ## the end goal is 4 columns and 30 rows:
@@ -10,7 +10,7 @@ norm7 <- read_csv("./norm7.csv")
 ## first pivot width measurements
 tidy_widths <-
   pivot_longer(
-    norm7,
+    raw,
     cols = c(`pH6w`, `pH7w`, `pH8w`),
     names_to = "pH", values_to = "width"
   ) %>%
@@ -23,7 +23,7 @@ print(tidy_widths)
 ## now areas
 tidy_areas <-
   pivot_longer(
-    norm7,
+    raw,
     cols = c(`pH6a`, `pH7a`, `pH8a`),
     names_to = "pH", values_to = "area"
   ) %>%
@@ -145,7 +145,6 @@ tidy_data %>%
 ## First remove pH = 7
 stats_data <-
   tidy_data %>%
-  filter(!pH == 7) %>%
   mutate(pH = as_factor(pH))
 
 ## Now "reshape" the data so that we can later analyze width
@@ -168,7 +167,7 @@ stats_data_reshaped <-
 ## We can only do this for now specifically because the data were
 ## centered at 0 beforehand.
 mod1 <-
-  lm(value ~ variable:pH - 1, 
+  lm(value ~ variable:pH, 
      data = stats_data_reshaped)
 summary(mod1)
 
@@ -186,7 +185,7 @@ install.packages("MCMCglmm")
 
 mcmod <-
   MCMCglmm::MCMCglmm(
-    value ~ variable:pH - 1, random = ~larva,
+    value ~ variable:pH, random = ~larva,
     data = stats_data_reshaped, scale = FALSE,
     nitt = 130000, thin = 100, burnin = 30000, 
     verbose = FALSE
