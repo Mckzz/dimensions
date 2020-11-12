@@ -148,6 +148,8 @@ stats_data <-
   filter(!pH == 7) %>%
   mutate(pH = as_factor(pH))
 
+print(stats_data)
+
 ## Now "reshape" the data so that we can later analyze width
 ## and area jointly (this will hopefully make more sense at
 ## a later point)
@@ -158,6 +160,9 @@ stats_data_reshaped <-
     stats_data,
     measure.vars = c("width", "area")
   )
+
+str(stats_data_reshaped)
+print(stats_data_reshaped)
 
 ## Let's try a simple model that does not account for individual
 ## larval identity

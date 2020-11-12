@@ -1,4 +1,4 @@
-####################### Vikram's wisdom ############################
+####################### Vikram ############################
 
 library(tidyverse)
 raw <- read_csv("./norm7.csv")
@@ -142,10 +142,12 @@ tidy_data %>%
 ## code
 
 
-## First remove pH = 7
+## pH column to factor so thatit can be melted properly (keeing in 7 this time because raw)
 stats_data <-
   tidy_data %>%
   mutate(pH = as_factor(pH))
+
+print(stats_data)
 
 ## Now "reshape" the data so that we can later analyze width
 ## and area jointly (this will hopefully make more sense at
@@ -157,6 +159,8 @@ stats_data_reshaped <-
     stats_data,
     measure.vars = c("width", "area")
   )
+
+print(stats_data_reshaped)
 
 ## Let's try a simple model that does not account for individual
 ## larval identity
@@ -170,6 +174,8 @@ mod1 <-
   lm(value ~ variable:pH, 
      data = stats_data_reshaped)
 summary(mod1)
+
+#tukeys...
 
 ## what this model is saying is that area is strongly affected but
 ## width is not (which is confirmed by the plot you had made). When
