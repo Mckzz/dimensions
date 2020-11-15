@@ -2,6 +2,8 @@
 
 library(tidyverse)
 raw <- read_csv("./norm7.csv")
+install.packages("reshape2")
+library(reshape2)
 
 ##### tidy up the data ####
 ## the end goal is 4 columns and 30 rows:
@@ -152,8 +154,7 @@ print(stats_data)
 ## Now "reshape" the data so that we can later analyze width
 ## and area jointly (this will hopefully make more sense at
 ## a later point)
-install.packages("reshape2")
-library(reshape2)
+
 stats_data_reshaped <-
   reshape2::melt(
     stats_data,
@@ -193,10 +194,13 @@ mcmod <-
   MCMCglmm::MCMCglmm(
     value ~ variable:pH, random = ~larva,
     data = stats_data_reshaped, scale = FALSE,
-    nitt = 130000, thin = 100, burnin = 30000, 
+    nitt = 1300000, thin = 1000, burnin = 300000, 
     verbose = FALSE
   )
 summary(mcmod)
+
+TukeyHSD(mod1)
+
 ## the main effects from this model (the post.mean in the summary 
 ## table) are very close to what we saw in the linear model
 

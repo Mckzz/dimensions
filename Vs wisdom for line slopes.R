@@ -2,6 +2,8 @@
 
 library(tidyverse)
 norm7 <- read_csv("./norm7.csv")
+install.packages("reshape2")
+library(reshape2)
 
 ##### tidy up the data ####
 ## the end goal is 4 columns and 30 rows:
@@ -153,8 +155,7 @@ print(stats_data)
 ## Now "reshape" the data so that we can later analyze width
 ## and area jointly (this will hopefully make more sense at
 ## a later point)
-install.packages("reshape2")
-library(reshape2)
+
 stats_data_reshaped <-
   reshape2::melt(
     stats_data,
@@ -193,7 +194,7 @@ mcmod <-
   MCMCglmm::MCMCglmm(
     value ~ variable:pH - 1, random = ~larva,
     data = stats_data_reshaped, scale = FALSE,
-    nitt = 130000, thin = 100, burnin = 30000, 
+    nitt = 1300000, thin = 1000, burnin = 300000, 
     verbose = FALSE
   )
 summary(mcmod)
@@ -219,6 +220,8 @@ mcmod_model_dat <-
          pH8_width = `variablewidth:pH8`,
          pH8_area = `variablearea:pH8`) %>%
   gather() 
+
+print(mcmod_model_dat)
 
 ## we'll use stat_halfeye from "tidybayes" in the plot
 ## it makes cool density plots of what the means of each
