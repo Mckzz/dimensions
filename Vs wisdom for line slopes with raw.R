@@ -164,7 +164,7 @@ stats_data_reshaped <-
   )
 stats_data_reshaped <- as.tibble(stats_data_reshaped)
 
-stats_data_reshaped$pH <- factor(stats_data_reshaped$pH, levels = c("7", "6", "8"))
+stats_data_reshaped$pH <- factor(stats_data_reshaped$pH, levels = c("7", "6", "8")) #didnt seem to do anything
 
 print(stats_data_reshaped)
 
@@ -197,9 +197,6 @@ install.packages("MCMCglmm")
 
 stats_data_reshaped <- as_tibble(stats_data_reshaped)
 
-write.csv(stats_data_reshaped)
-view(stats_data_reshaped) 
-
 mcmod <-
   MCMCglmm::MCMCglmm(
     value ~ variable:pH, random = ~larva,
@@ -210,7 +207,6 @@ mcmod <-
 
 summary(mcmod)
 
-TukeyHSD(mod1)
 
 ## the main effects from this model (the post.mean in the summary 
 ## table) are very close to what we saw in the linear model
