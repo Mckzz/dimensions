@@ -4,6 +4,7 @@ library(tidyverse)
 raw <- read_csv("./norm7.csv")
 install.packages("reshape2")
 library(reshape2)
+library(ggplot2)
 
 ##### tidy up the data ####
 ## the end goal is 4 columns and 30 rows:
@@ -151,6 +152,7 @@ stats_data <-
 
 print(stats_data)
 
+
 ## Now "reshape" the data so that we can later analyze width
 ## and area jointly (this will hopefully make more sense at
 ## a later point)
@@ -160,6 +162,9 @@ stats_data_reshaped <-
     stats_data,
     measure.vars = c("width", "area")
   )
+stats_data_reshaped <- as.tibble(stats_data_reshaped)
+
+stats_data_reshaped$pH <- factor(stats_data_reshaped$pH, levels = c("7", "6", "8"))
 
 print(stats_data_reshaped)
 
@@ -190,6 +195,11 @@ summary(mod1)
 ## Fit a linear mixed model
 install.packages("MCMCglmm")
 
+stats_data_reshaped <- as_tibble(stats_data_reshaped)
+
+write.csv(stats_data_reshaped)
+view(stats_data_reshaped) 
+
 mcmod <-
   MCMCglmm::MCMCglmm(
     value ~ variable:pH, random = ~larva,
@@ -197,6 +207,7 @@ mcmod <-
     nitt = 1300000, thin = 1000, burnin = 300000, 
     verbose = FALSE
   )
+
 summary(mcmod)
 
 TukeyHSD(mod1)

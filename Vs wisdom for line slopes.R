@@ -190,9 +190,19 @@ summary(mod1)
 ## Fit a linear mixed model
 install.packages("MCMCglmm")
 
-mcmod <-
+mcmod.sup <-
   MCMCglmm::MCMCglmm(
     value ~ variable:pH - 1, random = ~larva,
+    data = stats_data_reshaped, scale = FALSE,
+    nitt = 1300000, thin = 1000, burnin = 300000, 
+    verbose = FALSE
+  )
+summary(mcmod)
+
+# or intercept not supressed
+mcmod <-
+  MCMCglmm::MCMCglmm(
+    value ~ variable:pH, random = ~larva,
     data = stats_data_reshaped, scale = FALSE,
     nitt = 1300000, thin = 1000, burnin = 300000, 
     verbose = FALSE
