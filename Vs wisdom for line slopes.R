@@ -197,7 +197,7 @@ mcmod.sup <-
     nitt = 1300000, thin = 1000, burnin = 300000, 
     verbose = FALSE
   )
-summary(mcmod)
+summary(mcmod.sup)
 
 # or intercept not supressed
 mcmod <-
