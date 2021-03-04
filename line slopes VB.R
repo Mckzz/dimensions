@@ -4,6 +4,7 @@ library(tidyverse)
 norm7 <- read_csv("./norm7.csv")
 install.packages("reshape2")
 library(reshape2)
+library(ggplot2)
 
 ##### tidy up the data ####
 ## the end goal is 4 columns and 30 rows:
