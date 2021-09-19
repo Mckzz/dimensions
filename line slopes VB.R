@@ -1,7 +1,6 @@
 ####################### Vikram's wisdom ############################
 
 library(tidyverse)
-norm7 <- read_csv("./norm7.csv")
 install.packages("reshape2")
 library(reshape2)
 library(ggplot2)
@@ -157,6 +156,7 @@ print(stats_data)
 ## and area jointly (this will hopefully make more sense at
 ## a later point)
 
+#### error message seems not to hurt the model
 stats_data_reshaped <-
   reshape2::melt(
     stats_data,
@@ -191,10 +191,15 @@ summary(mod1)
 ## Fit a linear mixed model
 install.packages("MCMCglmm")
 
+prior <- list(
+  R = list(V = 1, nu = 0.002), 
+  G = list(G = list(V = 2, nu = 0.2)))
+
+
 mcmod.sup <-
   MCMCglmm::MCMCglmm(
     value ~ variable:pH - 1, random = ~larva,
-    data = stats_data_reshaped, scale = FALSE,
+    data = stats_data_reshaped, scale = FALSE, prior = prior,
     nitt = 1300000, thin = 1000, burnin = 300000, 
     verbose = FALSE
   )
